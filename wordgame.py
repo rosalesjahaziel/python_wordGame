@@ -3,35 +3,57 @@ import random
 
 def get_random_word():
     words = ["pizza", "cheese", "apples"]
-    word = words[random.randint( 0, len(words) -1)]
+    word = words[random.randint(0, len(words) - 1)]
     return word
+
 
 def show_word(word):
     for character in word:
         print character,    # On python 3.X use print(character, " ", end="")
     print ""
 
+
 def get_guess():
     print "Enter a letter: "
     return raw_input()  # On Python 3.x use input()
 
+
+def proccess_letter(letter, secret_word, blanked_word):
+    result = False
+    for i in range(0, len(secret_word)):
+        if secret_word[i] == letter:
+            result = True
+            blanked_word[i] = letter
+    return result
+
+
+def print_strikes(numer_of_strikes):
+    for i in range(0, numer_of_strikes):
+        print "X",
+    print ""
 
 
 def play_word_game():
     strikes = 0
     max_strikes = 3
     playing = True
-    
+
     word = get_random_word()
-    blanked_word = "_" * len(word)
+    blanked_word = list("_" * len(word))
 
     while playing:
         show_word(blanked_word)
         letter = get_guess()
-      
-        strikes += 1
+        found = proccess_letter(letter, word, blanked_word)
+             
+        if not found:
+            strikes += 1
+            print_strikes(strikes)
 
         if strikes >= max_strikes:
+            playing = False
+
+        if not "_" in blanked_word:
             playing = False
 
     if strikes >= max_strikes:
@@ -41,4 +63,3 @@ def play_word_game():
         
 print "Game started"
 play_word_game()
-
